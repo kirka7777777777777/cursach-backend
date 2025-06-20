@@ -1,0 +1,19 @@
+php artisan serve — запуск локального сервера.
+
+php artisan route:list — просмотр всех маршрутов.
+
+php artisan migrate — выполнение миграций.
+
+php artisan migrate:rollback — откат последней миграции.
+
+php artisan db:seed — запуск сидеров.
+
+php artisan make:model ModelName -mcr — создание модели, миграции, контроллера и ресурсного роутинга.
+
+php artisan make:controller ControllerName — создание контроллера.
+
+php artisan make:middleware MiddlewareName — создание middleware.
+
+php artisan make:factory FactoryName — создание фабрики.
+
+php artisan tinker — интерактивная консоль для работы с приложением.
