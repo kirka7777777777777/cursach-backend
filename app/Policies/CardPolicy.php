@@ -34,10 +34,25 @@ class CardPolicy
         return $user->hasRole(['admin', 'manager']);
     }
 
-    public function update(User $user, Card $card): bool
+    public function update(User $user, Card $card, array $data = [])
     {
-        // Обычные пользователи могут обновлять только свои карточки
-        return $user->id === $card->assigned_to || $user->id === $card->created_by;
+        // Админы и менеджеры могут всё
+        if ($user->hasRole(['admin', 'manager'])) {
+            return true;
+        }
+
+        // Обычный пользователь может:
+        // 1. Взять карточку (назначить себя)
+        if (isset($data['assigned_to']) && $data['assigned_to'] === $user->id) {
+            return $card->status === 'todo';
+        }
+
+        // 2. Переместить свою карточку в проверку
+        if (isset($data['status']) && $data['status'] === 'review') {
+            return $card->assigned_to === $user->id && $card->status === 'in_progress';
+        }
+
+        return false;
     }
 
     public function delete(User $user, Card $card): bool

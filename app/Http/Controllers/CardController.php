@@ -11,8 +11,9 @@ class CardController extends Controller
 {
     public function index()
     {
-        return Card::with('userAssigned', 'userCreated')->get();
+        return Card::with('userAssigned:id,name')->get();
     }
+
 
     public function store(Request $request)
     {
@@ -42,17 +43,19 @@ class CardController extends Controller
 
     public function update(Request $request, Card $card)
     {
-        $this->authorize('update', $card);
+        $this->authorize('update', [$card, $request->all()]);
 
         $validated = $request->validate([
             'title' => 'sometimes|string',
             'description' => 'nullable|string',
             'deadline' => 'nullable|date',
-            'status' => 'required|in:todo,in_progress,review,done', // Добавлен 'review'
+            'status' => 'sometimes|in:todo,in_progress,review,done',
+            'assigned_to' => 'sometimes|nullable|exists:users,id',
         ]);
 
         $card->update($validated);
-        return response()->json($card);
+
+        return $card->load('userAssigned:id,name');
     }
 
     public function destroy(Card $card)
