@@ -8,6 +8,8 @@ use App\Http\Controllers\ProfileController;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('register/manager', [AuthController::class, 'registerManager']);
 Route::post('login', [AuthController::class, 'login']);
+Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar']);
+Route::post('/logout', [ProfileController::class, 'logout'])->middleware('auth:sanctum');
 Route::get('/login', function () {
     return response()->json(['message' => 'Требуется авторизация'], 401);
 })->name('login');
